@@ -58,7 +58,7 @@ def triangularize(matrix, free_terms=None, search_determinant=False):
         return A, F
 
 
-def search_for_variables(A,F):
+def search_for_variables(A, F):
     n = len(A)
     X = [[0 for x in range(len(F[0]))] for i in range(n)]
 
@@ -76,16 +76,17 @@ def find_determinant(matrix):
     return triangularize(matrix, search_determinant=True)
 
 
-def print_matrix(matrix, free_terms_matrix):
+def print_matrix(matrix, free_terms_matrix = None):
     for row_number in range(len(matrix)):
         print("[", end="")
         for element in matrix[row_number]:
-            print("% 5.5f " % element, end="")
+            print("% 9.5f " % element, end="")
         if free_terms_matrix:
             print("|", end="")
             for element in free_terms_matrix[row_number]:
-                print(" % 5f" % element, end="")
+                print(" % 9.5f" % element, end="")
         print("]")
+
 
 def incoherence(matrix, solution_vector, free_terms):
     A = copy.deepcopy(matrix)
