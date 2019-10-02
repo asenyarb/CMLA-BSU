@@ -1,7 +1,13 @@
-# Lab 1. Gaussian elimination
-### Task:
-**Using the Gauss method of solving systems of linear algebraic equations**:
-1. Solve the system of linear algebraic equations
-2. Find the incoherence of found solution
-3. Calculate the initial matrix determinant
-4. Find the reverse matrix. Perform a check ( A * A^(-1) = E )
+# CMLA (Computational Methods of Linear Algebra)
+## Every lab is located on its own branch.
+
+
+A repository with the CMLA labs (BSU/FAMCS).
+
+## Structure 
+- Master branch only includes `README.md` and default `.gitignore` for **PyCharm IDE**.
+### Every lab branch includes:
+- `.idea/` - **PyCharm IDE** project settings
+- `src/` - Project *source code*
+- `README.md` - Lab description with the *main task* and, optionally, comments on the solution.
+- `.gitignore`
