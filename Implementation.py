@@ -6,7 +6,7 @@ if __name__ == "__main__":
     print("K = ", k, ", alpha = ", alpha)
 
     A = [[3.81, 0.25, 1.28, 0.75+alpha], [2.25, 1.32, 4.58 + alpha, 0.49],
-                      [5.31, 6.28 + alpha, 0.98, 1.04], [9.39 + alpha, 2.45, 3.35, 2.28]]
+                        [5.31, 6.28 + alpha, 0.98, 1.04], [9.39 + alpha, 2.45, 3.35, 2.28]]
     free_terms = [[4.21], [6.47 + alpha], [2.38], [10.48 + alpha]]
 
     print("\nLab_1 matrix:")
@@ -25,12 +25,12 @@ if __name__ == "__main__":
 
     S, D, determinant = forward(initial_matrix, free_terms)
     print("\nB = D * S:")
-    print_matrix(multiply_matrix(S, D))
+    print_matrix(multiply_matrix(D, S))
 
-  #  Y, X = backward(S, D, free_terms)
+    Y, X = backward(S, D, free_terms)
     print("\nY:")
-   # print_matrix(Y)
+    print_matrix(Y)
     print("\nX:")
-    #print_matrix(X)
+    print_matrix(X)
 
-    #print("\nDeterminant: ", determinant)
+    print("\nDeterminant: ", determinant)
