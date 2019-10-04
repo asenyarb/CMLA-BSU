@@ -27,35 +27,36 @@ def transposition(matrix, line_1, line_2):
 
 def triangularize(matrix, free_terms=None, search_determinant=False):
     A = copy.deepcopy(matrix)
-    if not search_determinant:
-        F = copy.deepcopy(free_terms)
+    F = copy.deepcopy(free_terms)
+    unit_matrix = create_unit_matrix(len(A))
     determinant = 1
 
     for i in range(0, len(A)):
         pivot_line_index = line_pivot_max(A, i)
-        transposition(A, i, pivot_line_index)
-        if not search_determinant:
+        if i != pivot_line_index:
+            transposition(A, i, pivot_line_index)
             transposition(F, i, pivot_line_index)
+            transposition(unit_matrix, i, pivot_line_index)
+            determinant *= -1
         pivot = A[i][i]
         determinant *= pivot
         for j in range(i+1, len(A)):
             first = A[j][i]
             for k in range(0, len(A)):
                 A[j][k] -= first * A[i][k] / pivot
-            if not search_determinant:
-                for k in range(0, len(F[0])):
-                    F[j][k] -= first * F[i][k] / pivot
+            for k in range(0, len(F[0])):
+                F[j][k] -= first * F[i][k] / pivot
+            for k in range(0, len(unit_matrix[0])):
+                unit_matrix[j][k] -= first * unit_matrix[i][k] / pivot
 
         for l in range(len(A)-1, -1, -1):
             A[i][l] /= pivot
-        if not search_determinant:
-            for l in range(len(F[0])-1, -1, -1):
-                F[i][l] /= pivot
+        for l in range(len(F[0])-1, -1, -1):
+            F[i][l] /= pivot
+        for l in range(len(unit_matrix[0]) - 1, -1, -1):
+            unit_matrix[i][l] /= pivot
 
-    if search_determinant:
-        return determinant
-    else:
-        return A, F
+    return A, F, unit_matrix, determinant
 
 
 def search_for_variables(A, F):
@@ -70,10 +71,6 @@ def search_for_variables(A, F):
                 X[j][i] -= A[j][k]*X[k][i]
 
     return X
-
-
-def find_determinant(matrix):
-    return triangularize(matrix, search_determinant=True)
 
 
 def print_matrix(matrix, free_terms_matrix = None):
@@ -97,3 +94,14 @@ def incoherence(matrix, solution_vector, free_terms):
     for i in range(len(F)):
         incoherence[i] = (F[i] - F_prime[i]).tolist()
     return incoherence
+
+
+def find_reverse_matrix(triangularized_A, triangularized_unit):
+    reverse_matrix = [[0 for x in range(len(triangularized_unit[0]))] for i
+                      in range(len(triangularized_unit))]
+    for i in range(len(triangularized_unit)):
+        column_unit = [[triangularized_unit[j][i]] for j in range(len(triangularized_unit))]
+        x_column = search_for_variables(triangularized_A, column_unit)
+        for j in range(len(reverse_matrix)):
+            reverse_matrix[j][i] = x_column[j][0]
+    return reverse_matrix

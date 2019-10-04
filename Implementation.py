@@ -13,7 +13,7 @@ if __name__ == "__main__":
     print_matrix(initial_matrix, free_terms)
 
     # System triangularization
-    transformed_matrix, transformed_free_terms = triangularize(initial_matrix, free_terms)
+    transformed_matrix, transformed_free_terms, transformed_unit, determinant = triangularize(initial_matrix, free_terms)
     print("\nTransformed matrix:")
     print_matrix(transformed_matrix, transformed_free_terms)
 
@@ -29,13 +29,10 @@ if __name__ == "__main__":
         print("dx[%d] = " % index, incoherence_matrix[index][0])
 
     # Searching for initial matrix determinant
-    determinant = find_determinant(initial_matrix)
     print("\nDeterminant: ", determinant)
 
     # Searching for reverse matrix
-    unit_matrix = create_unit_matrix(len(initial_matrix))
-    transformed_matrix, transformed_unit_matrix = triangularize(initial_matrix, unit_matrix)
-    reverse_matrix = search_for_variables(transformed_matrix, transformed_unit_matrix)
+    reverse_matrix = find_reverse_matrix(transformed_matrix, transformed_unit)
     print("\nReverse matrix:")
     print_matrix(reverse_matrix, None)
 
