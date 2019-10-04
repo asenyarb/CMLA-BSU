@@ -1,13 +1,7 @@
-# CMLA (Computational Methods of Linear Algebra)
-## Every lab is located on its own branch.
+# Lab 1. Square root method
+### Task:
+**Solve the system of linear algebraic equations by the square root method**:
+1. Solve the system of linear algebraic equations
+2. Calculate the initial matrix determinant
 
-
-A repository with the CMLA labs (BSU/FAMCS).
-
-## Structure 
-- Master branch only includes `README.md` and default `.gitignore` for **PyCharm IDE**.
-### Every lab branch includes:
-- `.idea/` - **PyCharm IDE** project settings
-- `src/` - Project *source code*
-- `README.md` - Lab description with the *main task* and, optionally, comments on the solution.
-- `.gitignore`
+**As initial matrix use matrix(A) from lab_1 multiplied by the transponated A**
