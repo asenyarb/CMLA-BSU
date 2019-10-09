@@ -13,24 +13,27 @@ if __name__ == "__main__":
     print_matrix(A, free_terms)
 
     print("\nTransponated matrix:")
-    transponated_matrix = transponate(A)
-    print_matrix(transponated_matrix)
+    transposed_matrix = transponate(A)
+    print_matrix(transposed_matrix)
 
+    # Multiply initial matrix by transposed initial matrix to get symmetrical matrix
     print("\nInitial matrix:")
-    initial_matrix = multiply_matrix(A, transponated_matrix)
-    print_matrix(initial_matrix, free_terms)
+    initial_matrix = multiply_matrix(transposed_matrix, A)
+    print_matrix(initial_matrix)
 
+    # We also should multiply free terms matrix if we want our new equation to be equivalent to the initial one
     print("\nTransponated initial matrix * f")
-    print_matrix(multiply_matrix(transponate(initial_matrix), free_terms))
+    free_terms = multiply_matrix(transposed_matrix, free_terms)
+    print_matrix(free_terms)
 
-    S, D, determinant = forward(initial_matrix, free_terms)
+    S, D, determinant, Y = forward(initial_matrix, free_terms)
     print("\nB = D * S:")
     print_matrix(multiply_matrix(D, S))
-
-    Y, X = backward(S, D, free_terms)
     print("\nY:")
     print_matrix(Y)
+
+    X = backward(S, D, Y)
     print("\nX:")
     print_matrix(X)
 
-    print("\nDeterminant: ", determinant)
+    print("\n|det(A)| = %.10f" % determinant)

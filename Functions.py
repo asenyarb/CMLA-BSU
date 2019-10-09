@@ -4,11 +4,11 @@ from mpmath import *
 
 
 def transponate(matrix):
-    transponated_matrix = [[0 for i in range(len(matrix))] for i in range(len(matrix))]
-    for i in range(len(transponated_matrix)):
-        for j in range(len(transponated_matrix[0])):
-            transponated_matrix[i][j] = matrix[j][i]
-    return transponated_matrix
+    transposed_matrix = [[0 for i in range(len(matrix))] for i in range(len(matrix))]
+    for i in range(len(transposed_matrix)):
+        for j in range(len(transposed_matrix[0])):
+            transposed_matrix[i][j] = matrix[j][i]
+    return transposed_matrix
 
 
 def multiply_matrix(A, B):
@@ -56,13 +56,8 @@ def forward(initial_matrix, free_terms):
             for k in range(i):
                 nominator = fsub(nominator, fmul(S[k][i], fmul(S[k][j], D[k][k])))
             S[i][j] = S_prime[j][i] = fdiv(nominator, divisor)
-    return S, D, determinant
 
-def backward(S, D, free_terms):
-    mp.dps = 1000
-    X = [[mpf("0")] for i in range(len(S))]
     Y = [[mpf("0")] for i in range(len(S))]
-
     # Find Y matrix
     for i in range(len(S)):
         nominator = free_terms[i][0]
@@ -70,10 +65,15 @@ def backward(S, D, free_terms):
             nominator = fsub(nominator, fmul(S[k][i], Y[k][0]))
         Y[i][0] = fdiv(nominator, S[i][i])
 
+    return S, D, sqrt(determinant), Y
+
+def backward(S, D, Y):
+    mp.dps = 1000
+    X = [[mpf("0")] for i in range(len(S))]
     # Find X matrix
     for j in range(len(S)-1, -1, -1):
         nominator = Y[j][0]
         for k in range(j+1, len(S)):
             nominator = fsub(nominator, fmul(D[j][j], fmul(S[j][k], X[k][0])))
         X[j][0] = fdiv(nominator, fmul(D[j][j], S[j][j]))
-    return Y, X
+    return X
