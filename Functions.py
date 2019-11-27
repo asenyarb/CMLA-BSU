@@ -44,15 +44,13 @@ def triangularize(matrix, free_terms=None, search_determinant=False):
             first = A[j][i]
             for k in range(0, len(A)):
                 A[j][k] -= first * A[i][k] / pivot
-            for k in range(0, len(F[0])):
-                F[j][k] -= first * F[i][k] / pivot
+            F[j] -= first * F[i] / pivot
             for k in range(0, len(unit_matrix[0])):
                 unit_matrix[j][k] -= first * unit_matrix[i][k] / pivot
 
         for l in range(len(A)-1, -1, -1):
             A[i][l] /= pivot
-        for l in range(len(F[0])-1, -1, -1):
-            F[i][l] /= pivot
+        F[i] /= pivot
         for l in range(len(unit_matrix[0]) - 1, -1, -1):
             unit_matrix[i][l] /= pivot
 
@@ -61,19 +59,18 @@ def triangularize(matrix, free_terms=None, search_determinant=False):
 
 def search_for_variables(A, F):
     n = len(A)
-    X = [[0 for x in range(len(F[0]))] for i in range(n)]
+    X = [0 for i in range(n)]
 
-    for i in range(0, len(F[0])):
-        X[n-1][i] = F[n-1][i]
-        for j in range(n-1, -1, -1):
-            X[j][i] = F[j][i]
-            for k in range(j+1, n):
-                X[j][i] -= A[j][k]*X[k][i]
+    X[n-1] = F[n-1]
+    for j in range(n-1, -1, -1):
+        X[j] = F[j]
+        for k in range(j+1, n):
+            X[j] -= A[j][k]*X[k]
 
     return X
 
 
-def print_matrix(matrix, free_terms_matrix = None):
+def print_matrix(matrix, free_terms_matrix=None, free_terms_vector=None):
     for row_number in range(len(matrix)):
         print("[", end="")
         for element in matrix[row_number]:
@@ -82,7 +79,15 @@ def print_matrix(matrix, free_terms_matrix = None):
             print("|", end="")
             for element in free_terms_matrix[row_number]:
                 print(" % 9.5f" % element, end="")
+        elif free_terms_vector:
+            print("|", end="")
+            print(" % 9.5f" % free_terms_vector[row_number], end="")
         print("]")
+
+
+def print_vector(vector):
+    for el in vector:
+        print("[ %8.5f ]" % el)
 
 
 def incoherence(matrix, solution_vector, free_terms):
@@ -100,8 +105,8 @@ def find_reverse_matrix(triangularized_A, triangularized_unit):
     reverse_matrix = [[0 for x in range(len(triangularized_unit[0]))] for i
                       in range(len(triangularized_unit))]
     for i in range(len(triangularized_unit)):
-        column_unit = [[triangularized_unit[j][i]] for j in range(len(triangularized_unit))]
+        column_unit = [triangularized_unit[j][i] for j in range(len(triangularized_unit))]
         x_column = search_for_variables(triangularized_A, column_unit)
         for j in range(len(reverse_matrix)):
-            reverse_matrix[j][i] = x_column[j][0]
+            reverse_matrix[j][i] = x_column[j]
     return reverse_matrix
